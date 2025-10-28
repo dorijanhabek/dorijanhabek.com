@@ -1,0 +1,330 @@
+/* ===============================
+   GLOBAL LAYOUT + BACKGROUND
+   =============================== */
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+#bg-video {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ===============================
+   TOP NAVIGATION LAYOUT
+   =============================== */
+#nav-container, .nav-container {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 14px;
+  z-index: 1000;
+}
+
+.nav-text-btn {
+  font-family: "Poppins", "Segoe UI", "Inter", system-ui, sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: #fff;
+  background: transparent;
+  border: none;
+  padding: 4px 6px;
+  cursor: pointer;
+  position: relative;
+  letter-spacing: 0.4px;
+  line-height: 1.2;
+  transition: color 0.3s ease;
+}
+
+.nav-text-btn:hover { color: #e8e8e8; }
+.nav-text-btn:focus { outline: none; }
+
+/* underline animation */
+.nav-text-btn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 420ms cubic-bezier(.4,0,.2,1);
+  pointer-events: none;
+}
+.nav-text-btn:hover::after,
+.nav-text-btn:focus-visible::after,
+.nav-text-btn.active::after {
+  transform: scaleX(1);
+}
+
+/* vertical line when dropdown active */
+.nav-text-btn::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: calc(100% + 3px);
+  width: 1px;
+  height: 0;
+  background: currentColor;
+  transform-origin: top;
+  transition: height 420ms cubic-bezier(.4,0,.2,1);
+  pointer-events: none;
+}
+.nav-text-btn.active::before {
+  height: var(--dd-height, 0px);
+}
+
+/* ===============================
+   DROPDOWN MENUS
+   =============================== */
+:root {
+  --item-underline-offset: 3px;
+  --item-underline-thickness: 1px;
+}
+
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  background: transparent;
+  padding: 6px 0 0 12px;
+  z-index: 2000;
+  transform-origin: top;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+.dropdown.closed { opacity: 0; transform: translateY(-6px); pointer-events: none; }
+.dropdown.open   { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+.dropdown a,
+.dropdown .dd-item {
+  display: block;
+  position: relative;
+  color: #fff;
+  text-decoration: none;
+  font-family: "Poppins","Segoe UI","Inter",system-ui,sans-serif;
+  font-size: 16px;
+  line-height: 1.35;
+  padding: 4px 0;
+  white-space: nowrap;
+}
+.dropdown a::after,
+.dropdown .dd-item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: calc(-1 * var(--item-underline-offset));
+  height: var(--item-underline-thickness);
+  width: 100%;
+  background: currentColor;
+  opacity: .7;
+  transform: scaleX(1);
+  transition: opacity .2s ease;
+}
+.dropdown a:hover::after,
+.dropdown .dd-item:hover::after { opacity: 1; }
+
+/* sub-dropdowns (used in Skills) */
+.has-sub { position: relative; }
+.has-sub .dd-title {
+  display: block;
+  position: relative;
+  color: #fff;
+  font-family: "Poppins","Segoe UI","Inter",system-ui,sans-serif;
+  font-size: 16px;
+  line-height: 1.35;
+  padding: 4px 0;
+  cursor: pointer;
+}
+.has-sub .dd-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: calc(-1 * var(--item-underline-offset));
+  height: var(--item-underline-thickness);
+  width: 100%;
+  background: currentColor;
+  opacity: .7;
+}
+.has-sub .dd-title:hover::after { opacity: 1; }
+.has-sub .caret { margin-left: 8px; font-size: .8em; opacity: .7; }
+
+.sub-dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 0;
+  background: transparent;
+  padding: 0 0 0 12px;
+  min-width: 180px;
+  transform-origin: left top;
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+.sub-dropdown.closed { opacity: 0; transform: translateX(-6px); pointer-events: none; }
+.sub-dropdown.open   { opacity: 1; transform: translateX(0); pointer-events: auto; }
+
+/* ===============================
+   MUSIC TOGGLE BUTTON
+   =============================== */
+#music-toggle {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 1500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  min-width: 148px;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.95);
+  border-radius: 12px;
+  font-family: "Poppins","Segoe UI","Inter",system-ui,sans-serif;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  transition: background .22s ease, box-shadow .22s ease, transform .18s ease;
+}
+#music-toggle:hover { background: rgba(255,255,255,0.08); }
+#music-toggle:active { transform: translateY(1px); }
+
+/* animated text swap */
+#music-toggle .swap {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 1.2em;
+  overflow: hidden;
+  text-align: center;
+}
+#music-toggle .label {
+  position: absolute;
+  left: 0; top: 0; width: 100%;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: transform .35s ease, opacity .35s ease;
+  white-space: nowrap;
+}
+#music-toggle .label-off {
+  opacity: 1;
+  transform: translateY(0);
+}
+#music-toggle.state-on .label-on { opacity: 1; transform: translateY(0); }
+#music-toggle.state-on .label-off { opacity: 0; transform: translateY(-100%); }
+#music-toggle.state-off .label-off { opacity: 1; transform: translateY(0); }
+#music-toggle.state-off .label-on { opacity: 0; transform: translateY(100%); }
+
+/* ===============================
+   RESPONSIVE DESIGN
+   =============================== */
+
+@media (max-width: 768px) {
+  .nav-text-btn {
+    font-size: 18px;
+    letter-spacing: 0.3px;
+  }
+}
+
+@media (max-width: 520px) {
+  .nav-container, #nav-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(8px);
+    border-radius: 0;
+    padding: 10px 14px;
+    z-index: 2000;
+  }
+
+  .nav-text-btn {
+    display: none !important;
+  }
+
+  .nav-text-btn.nav-contact {
+    display: inline-block !important;
+  }
+
+  #music-toggle {
+    display: inline-flex !important;
+  }
+
+  .dropdown {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    top: 60px;
+    background: rgba(0,0,0,0.85);
+    padding: 10px 12px;
+    border-radius: 10px;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .nav-text-btn::before,
+  .nav-text-btn::after {
+    transform-origin: left center;
+  }
+}
+
+@media (pointer: coarse) {
+  .nav-text-btn { padding: 6px 10px; }
+}
+
+#controls {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  z-index: 1200;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 12px 16px;
+  border-radius: 12px;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  backdrop-filter: blur(8px);
+}
+
+#controls label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+#controls input[type="range"] {
+  flex: 1;
+  accent-color: #cc00ff;
+  cursor: pointer;
+}
